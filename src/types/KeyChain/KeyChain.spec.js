@@ -2,6 +2,7 @@ const Dashcore = require('@dashevo/dashcore-lib');
 const { expect } = require('chai');
 const KeyChain = require('./KeyChain');
 const { mnemonicToHDPrivateKey } = require('../../utils/mnemonic');
+const {publicKey} = require("../Wallet/methods/fromPublicKey");
 
 let keychain;
 const mnemonic = 'during develop before curtain hazard rare job language become verb message travel';
@@ -9,17 +10,9 @@ const pk = '4226d5e2fe8cbfe6f5beb7adf5a5b08b310f6c4a67fc27826779073be6f5699e';
 describe('Keychain', function suite() {
   this.timeout(10000);
   it('should create a keychain', () => {
-    const expectedException1 = 'Expect privateKey, publicKey, HDPublicKey, HDPrivateKey or Address';
+    const expectedException1 = 'Expect publicKey, HDPublicKey or Address';
     expect(() => new KeyChain()).to.throw(expectedException1);
     expect(() => new KeyChain(mnemonic)).to.throw(expectedException1);
-
-    keychain = new KeyChain({ HDPrivateKey: mnemonicToHDPrivateKey(mnemonic, 'testnet') });
-    expect(keychain.type).to.equal('HDPrivateKey');
-    expect(keychain.network.toString()).to.equal('testnet');
-    expect(keychain.keys).to.deep.equal({});
-  });
-  it('should get private key', () => {
-    expect(keychain.getPrivateKey().toString()).to.equal(pk);
   });
   it('should generate key for full path', () => {
     const path = 'm/44\'/1\'/0\'/0/0';
@@ -66,20 +59,14 @@ describe('Keychain - single privateKey', function suite() {
   it('should correctly errors out when not a HDPublicKey (privateKey)', () => {
     const privateKey = Dashcore.PrivateKey().toString();
     const network = 'livenet';
-    const pkKeyChain = new KeyChain({ privateKey, network });
+    const pkKeyChain = new KeyChain({ publicKey: privateKey.publicKey, network });
     expect(pkKeyChain.network).to.equal(network);
     expect(pkKeyChain.keys).to.deep.equal({});
-    expect(pkKeyChain.type).to.equal('privateKey');
-    expect(pkKeyChain.privateKey).to.equal(privateKey);
+    expect(pkKeyChain.type).to.equal('publicKey');
 
     const expectedException1 = 'Wallet is not loaded from a mnemonic or a HDPubKey, impossible to derivate keys';
     const expectedException2 = 'Wallet is not loaded from a mnemonic or a HDPubKey, impossible to derivate child';
     expect(() => pkKeyChain.generateKeyForPath()).to.throw(expectedException1);
     expect(() => pkKeyChain.generateKeyForChild()).to.throw(expectedException2);
-  });
-  it('should get private key', () => {
-    const privateKey = Dashcore.PrivateKey().toString();
-    const pkKeyChain = new KeyChain({ privateKey, network: 'livenet' });
-    expect(pkKeyChain.getPrivateKey().toString()).to.equal(privateKey);
   });
 });

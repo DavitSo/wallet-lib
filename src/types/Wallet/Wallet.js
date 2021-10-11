@@ -98,6 +98,7 @@ class Wallet extends EventEmitter {
     } else {
       this.fromMnemonic(generateNewMnemonic());
     }
+    // TODO SAVE privateKey in secure storage
 
     // Notice : Most of the time, wallet id is deterministic
     this.generateNewWalletId();
