@@ -15,14 +15,18 @@ describe('Wallet - fromPrivateKey', function suite() {
     fromPrivateKey.call(self1, cR4t6eFixture.privateKey);
     expect(self1.walletType).to.equal(WALLET_TYPES.PRIVATEKEY);
     expect(self1.mnemonic).to.equal(null);
-    expect(self1.keyChain.type).to.equal('publicKey');
+    expect(self1.privateKey).to.equal(cR4t6eFixture.privateKey);
+    expect(self1.keyChain.type).to.equal('privateKey');
+    expect(self1.keyChain.privateKey).to.equal(cR4t6eFixture.privateKey);
     expect(self1.keyChain.keys).to.deep.equal({});
 
     const self2 = {};
     fromPrivateKey.call(self2, cR4t6eFixture.privateKey);
     expect(self2.walletType).to.equal(WALLET_TYPES.PRIVATEKEY);
     expect(self2.mnemonic).to.equal(null);
-    expect(self2.keyChain.type).to.equal('publicKey');
+    expect(self2.privateKey).to.equal(cR4t6eFixture.privateKey);
+    expect(self2.keyChain.type).to.equal('privateKey');
+    expect(self2.keyChain.privateKey).to.equal(cR4t6eFixture.privateKey);
     expect(self2.keyChain.keys).to.deep.equal({});
   });
   it('should reject invalid mnemonic', () => {

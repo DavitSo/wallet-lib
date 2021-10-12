@@ -14,18 +14,16 @@ class KeyChain {
     this.keys = { ...defaultOpts.keys };
 
     if (has(opts, 'HDPrivateKey')) {
-      /*this.type = 'HDPrivateKey';
+      this.type = 'HDPrivateKey';
       this.HDPrivateKey = (typeof opts.HDPrivateKey === 'string') ? HDPrivateKey(opts.HDPrivateKey) : opts.HDPrivateKey;
-      this.network = this.HDPrivateKey.network;*/
-      throw new Error('Do not expect HDPrivateKey');
+      this.network = this.HDPrivateKey.network;
     } else if (has(opts, 'HDPublicKey')) {
       this.type = 'HDPublicKey';
       this.HDPublicKey = (typeof opts.HDPublicKey === 'string') ? HDPublicKey(opts.HDPublicKey) : opts.HDPublicKey;
       this.network = this.HDPublicKey.network;
     } else if (has(opts, 'privateKey')) {
-      /*this.type = 'privateKey';
-      this.privateKey = opts.privateKey;*/
-      throw new Error('Do not expect privateKey');
+      this.type = 'privateKey';
+      this.privateKey = opts.privateKey;
     } else if (has(opts, 'publicKey')) {
       this.type = 'publicKey';
       this.publicKey = opts.publicKey;
@@ -33,7 +31,7 @@ class KeyChain {
       this.type = 'address';
       this.address = opts.address.toString();
     } else {
-      throw new Error('Expect publicKey, HDPublicKey or Address');
+      throw new Error('Expect privateKey, publicKey, HDPublicKey, HDPrivateKey or Address');
     }
     if (opts.network) this.network = opts.network;
     if (opts.keys) this.keys = { ...opts.keys };

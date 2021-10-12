@@ -14,10 +14,8 @@ module.exports = function fromMnemonic(mnemonic) {
     throw new Error('Expected a valid mnemonic (typeof String or Mnemonic)');
   }
   const trimmedMnemonic = mnemonic.toString().trim();
-  const hdPrivateKey = mnemonicToHDPrivateKey(trimmedMnemonic, this.network, this.passphrase);
-  const { publicKey } = hdPrivateKey;
   this.walletType = WALLET_TYPES.HDWALLET;
-  // this.mnemonic = trimmedMnemonic; // todo : What about without this ?
-  // this.HDPrivateKey = mnemonicToHDPrivateKey(trimmedMnemonic, this.network, this.passphrase);
-  this.keyChain = new KeyChain({ publicKey: publicKey });
+  this.mnemonic = trimmedMnemonic; // todo : What about without this ?
+  this.HDPrivateKey = mnemonicToHDPrivateKey(trimmedMnemonic, this.network, this.passphrase);
+  this.keyChain = new KeyChain({ HDPrivateKey: this.HDPrivateKey });
 };
