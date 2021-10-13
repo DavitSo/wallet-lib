@@ -4,6 +4,7 @@ const { hasMethod } = require('../../../utils');
 
 const mergeHelper = (initial = {}, additional = {}) => merge(initial, additional);
 const { REHYDRATE_STATE_FAILED, REHYDRATE_STATE_SUCCESS } = require('../../../EVENTS');
+const SInfo = require("react-native-sensitive-info");
 
 /**
  * Fetch the state from the persistence adapter
@@ -25,6 +26,12 @@ const rehydrateState = async function rehydrateState() {
         ? (await this.adapter.getItem('instantLocks') || this.store.instantLocks)
         : this.store.instantLocks;
 
+      // TODO retrieve sensitive data storage and add them to wallet
+      const walletKeys = Object.keys(wallets);
+      for (let i = 0; i < walletKeys.length; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        wallets[walletKeys[i]].mnemonic = await SInfo.getItem(`WalletId${walletKeys[i]}`, {}); // TODO add touch/faceID
+      }
       // We need to keep deserialized instant locks
       Object.keys(instantLocks).forEach((transactionHash) => {
         const instantLock = instantLocks[transactionHash];

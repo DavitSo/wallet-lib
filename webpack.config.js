@@ -8,6 +8,9 @@ const webConfig = {
     // Prevent embedded winston to throw error with FS not existing.
     fs: 'empty',
   },
+  module: {
+    rules: [{ test: /\.js$/, exclude: /node_modules/, use: 'raw-loader' }],
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'umd',

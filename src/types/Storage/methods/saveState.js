@@ -1,3 +1,5 @@
+const SInfo = require('react-native-sensitive-info');
+const _ = require('lodash');
 const { SAVE_STATE_SUCCESS, SAVE_STATE_FAILED } = require('../../../EVENTS');
 
 /**
@@ -8,8 +10,17 @@ const saveState = async function saveState() {
   if (this.autosave && this.adapter && this.adapter.setItem) {
     const self = this;
     try {
+      // TODO remove sensitive data from wallet
+      const walletsClone = _.cloneDeep(self.store.wallets);
+
+      const walletKeys = Object.keys(walletsClone);
+      for (let i = 0; i < walletKeys.length; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        await SInfo.setItem(`WalletId${walletKeys[i]}`, walletsClone[walletKeys[i]].mnemonic, {}); // TODO add touch/faceID
+        delete walletsClone[walletKeys[i]].mnemonic;
+      }
       await this.adapter.setItem('transactions', { ...self.store.transactions });
-      await this.adapter.setItem('wallets', { ...self.store.wallets });
+      await this.adapter.setItem('wallets', { ...walletsClone });
       await this.adapter.setItem('chains', { ...self.store.chains });
       await this.adapter.setItem('instantLocks', { ...self.store.instantLocks });
       this.lastSave = +new Date();
