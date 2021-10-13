@@ -1,7 +1,9 @@
+const SInfo = require('react-native-sensitive-info');
 const { PrivateKey, Networks } = require('@dashevo/dashcore-lib');
 
 const EventEmitter = require('events');
 const _ = require('lodash');
+const { mnemonicToHDPrivateKey } = require('../../utils/mnemonic');
 const Storage = require('../Storage/Storage');
 const {
   generateNewMnemonic,
@@ -29,6 +31,7 @@ const fromHDPrivateKey = require('./methods/fromHDPrivateKey');
 const generateNewWalletId = require('./methods/generateNewWalletId');
 
 const createTransportFromOptions = require('../../transport/createTransportFromOptions');
+const {WALLET_TYPES} = require("../../../CONSTANTS");
 
 /**
  * Instantiate a basic Wallet object,
@@ -162,6 +165,59 @@ class Wallet extends EventEmitter {
     const Identities = require('../Identities/Identities');
     this.identities = new Identities(this);
     this.savedBackup = false; // TODO: When true, we delete mnemonic from internals
+  }
+
+  /**
+   * Clear mnemonic and other sensitive keys from wallet and save private key in secure storage
+   * @returns {Promise<void>}
+   */
+  async clearAndSaveSensitiveData() {
+    let { privateKey } = this;
+    if (privateKey) {
+      await SInfo.setItem(`WalletId${this.walletId}`, privateKey, {}); // TODO add touch/faceID
+    } else {
+      switch (this.walletType) {
+        case WALLET_TYPES.PRIVATEKEY:
+        case WALLET_TYPES.SINGLE_ADDRESS: {
+          if (!this.privateKey) {
+            throw new Error('No PrivateKey to save in secure storage');
+          }
+          privateKey = this.privateKey;
+          break;
+        }
+        case WALLET_TYPES.ADDRESS: {
+          privateKey = null;
+          break;
+        }
+        case WALLET_TYPES.PUBLICKEY: {
+          privateKey = null;
+          break;
+        }
+        case WALLET_TYPES.HDPUBLIC: {
+          privateKey = null;
+          break;
+        }
+        case WALLET_TYPES.HDWALLET: {
+          if (this.mnemonic) {
+            const hdPrivateKey = mnemonicToHDPrivateKey(this.mnemonic, this.network, this.passphrase);
+            privateKey = hdPrivateKey.privateKey;
+          } else if (this.HDPrivateKey) {
+            privateKey = this.HDPrivateKey.privateKey;
+          } else {
+            throw new Error('No HDPrivateKey or mnemonic to save in secure storage');
+          }
+          break;
+        }
+        default: {
+          throw new Error('Invalid wallet type');
+        }
+      }
+    }
+    if (!privateKey) {
+      // TODO discuss/test. user does not have signing option, only view permission
+    } else {
+      await SInfo.setItem(`WalletId${this.walletId}`, privateKey, {}); // TODO add touch/faceID
+    }
   }
 }
 

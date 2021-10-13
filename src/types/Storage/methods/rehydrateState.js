@@ -1,10 +1,10 @@
 const { merge } = require('lodash');
 const { InstantLock } = require('@dashevo/dashcore-lib');
+const SInfo = require('react-native-sensitive-info');
 const { hasMethod } = require('../../../utils');
 
 const mergeHelper = (initial = {}, additional = {}) => merge(initial, additional);
 const { REHYDRATE_STATE_FAILED, REHYDRATE_STATE_SUCCESS } = require('../../../EVENTS');
-const SInfo = require("react-native-sensitive-info");
 
 /**
  * Fetch the state from the persistence adapter
