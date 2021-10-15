@@ -1,5 +1,5 @@
 const { PrivateKey, HDPrivateKey } = require('@dashevo/dashcore-lib');
-const SInfo = require('react-native-sensitive-info');
+const fs = require('fs');
 /**
  * To any object passed (Transaction, ST,..), will try to sign the message given passed keys.
  * @param {Transaction} object - The object to sign
@@ -31,7 +31,7 @@ module.exports = async function sign(object, privateKeys = [], sigType) {
     });
   }
 
-  const privateKey = await SInfo.getItem(`WalletId${this.walletId}`, {}); // TODO add touch/faceID
+  const privateKey = fs.readFileSync('./secret', { encoding: 'utf-8', flag: 'r' });
 
   return this.keyChain.sign(object, [privateKey], sigType);
 };

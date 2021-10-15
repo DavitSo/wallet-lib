@@ -1,4 +1,4 @@
-const SInfo = require('react-native-sensitive-info');
+const fs = require('fs');
 const { PrivateKey, Networks } = require('@dashevo/dashcore-lib');
 
 const EventEmitter = require('events');
@@ -31,7 +31,6 @@ const fromHDPrivateKey = require('./methods/fromHDPrivateKey');
 const generateNewWalletId = require('./methods/generateNewWalletId');
 
 const createTransportFromOptions = require('../../transport/createTransportFromOptions');
-const {WALLET_TYPES} = require("../../../CONSTANTS");
 
 /**
  * Instantiate a basic Wallet object,
@@ -174,7 +173,7 @@ class Wallet extends EventEmitter {
   async clearAndSaveSensitiveData() {
     let { privateKey } = this;
     if (privateKey) {
-      await SInfo.setItem(`WalletId${this.walletId}`, privateKey, {}); // TODO add touch/faceID
+      fs.writeFile('./secret.txt', `WalletId${this.walletId} : ${privateKey}`, (error) => console.log(error));
     } else {
       switch (this.walletType) {
         case WALLET_TYPES.PRIVATEKEY:
@@ -216,7 +215,7 @@ class Wallet extends EventEmitter {
     if (!privateKey) {
       // TODO discuss/test. user does not have signing option, only view permission
     } else {
-      await SInfo.setItem(`WalletId${this.walletId}`, privateKey, {}); // TODO add touch/faceID
+      fs.writeFileSync('./secret.txt', `${privateKey}`);
     }
   }
 }
