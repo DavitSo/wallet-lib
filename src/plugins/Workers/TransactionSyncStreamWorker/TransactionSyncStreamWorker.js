@@ -1,10 +1,13 @@
 const {
   Transaction, MerkleBlock, InstantLock,
 } = require('@dashevo/dashcore-lib');
+const GrpcError = require('@dashevo/grpc-common/lib/server/error/GrpcError');
+const GrpcErrorCodes = require('@dashevo/grpc-common/lib/server/error/GrpcErrorCodes');
 const { WALLET_TYPES } = require('../../../CONSTANTS');
 const sleep = require('../../../utils/sleep');
 
 const Worker = require('../../Worker');
+const isBrowser = require('../../../utils/isBrowser');
 
 class TransactionSyncStreamWorker extends Worker {
   constructor(options) {
@@ -12,6 +15,7 @@ class TransactionSyncStreamWorker extends Worker {
       name: 'TransactionSyncStreamWorker',
       executeOnStart: true,
       firstExecutionRequired: true,
+      awaitOnInjection: true,
       workerIntervalTime: 0,
       gapLimit: 10,
       dependencies: [
@@ -34,6 +38,7 @@ class TransactionSyncStreamWorker extends Worker {
     this.stream = null;
     this.incomingSyncPromise = null;
     this.pendingRequest = {};
+    this.delayedRequests = {};
   }
 
   /**
@@ -165,18 +170,47 @@ class TransactionSyncStreamWorker extends Worker {
     }
     this.syncIncomingTransactions = false;
 
-    if (this.stream) {
-      this.stream.cancel();
-      // When calling stream.cancel(), the stream will emit 'error' event with the code 'CANCELLED'.
-      // There are two cases when this happens: when the gap limit is filled and syncToTheGapLimit
-      // and the stream needs to be restarted with new parameters, and here,
-      // when stopping the worker.
-      // The code in stream worker distinguishes whether it need to reconnect or not by the fact
-      // that the old stream object is present or not. When it is set to null, it won't try to
-      // reconnect to the stream.
-      this.stream = null;
+    if (isBrowser()) {
+      // Under browser environment, grpc-web doesn't call error and end events
+      // so we call it by ourselves
+      if (this.stream) {
+        return new Promise((resolve) => setImmediate(() => {
+          if (this.stream) {
+            this.stream.cancel();
+
+            const error = new GrpcError(GrpcErrorCodes.CANCELLED, 'Cancelled on client');
+            // call onError events
+            this.stream.f.forEach((func) => func(error));
+
+            // call onEnd events
+            this.stream.c.forEach((func) => func());
+
+            this.stream = null;
+          }
+
+          resolve(true);
+        }));
+      }
     }
-    return true;
+
+    // Wrapping `cancel` in `setImmediate` due to bug with double-free
+    // explained here (https://github.com/grpc/grpc-node/issues/1652)
+    // and here (https://github.com/nodejs/node/issues/38964)
+    return new Promise((resolve) => setImmediate(() => {
+      if (this.stream) {
+        this.stream.cancel();
+        // When calling stream.cancel(), the stream will emit 'error' event
+        // with the code 'CANCELLED'.
+        // There are two cases when this happens: when the gap limit is filled
+        // and syncToTheGapLimit and the stream needs to be restarted with new parameters,
+        // and here, when stopping the worker.
+        // The code in stream worker distinguishes whether it need to reconnect or not by the fact
+        // that the old stream object is present or not. When it is set to null, it won't try to
+        // reconnect to the stream.
+        this.stream = null;
+      }
+      resolve(true);
+    }));
   }
 
   setLastSyncedBlockHash(hash) {
@@ -209,6 +243,8 @@ TransactionSyncStreamWorker.prototype.getBestBlockHeightFromTransport = require(
 TransactionSyncStreamWorker.prototype.setLastSyncedBlockHeight = require('./methods/setLastSyncedBlockHeight');
 TransactionSyncStreamWorker.prototype.getLastSyncedBlockHeight = require('./methods/getLastSyncedBlockHeight');
 TransactionSyncStreamWorker.prototype.startHistoricalSync = require('./methods/startHistoricalSync');
+TransactionSyncStreamWorker.prototype.handleTransactionFromStream = require('./methods/handleTransactionFromStream');
+TransactionSyncStreamWorker.prototype.processChunks = require('./methods/processChunks');
 TransactionSyncStreamWorker.prototype.startIncomingSync = require('./methods/startIncomingSync');
 TransactionSyncStreamWorker.prototype.syncUpToTheGapLimit = require('./methods/syncUpToTheGapLimit');
 
