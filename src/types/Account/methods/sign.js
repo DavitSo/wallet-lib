@@ -8,30 +8,6 @@ const fs = require('fs');
  * @return {{Promise<*>}} transaction - the signed transaction
  */
 module.exports = async function sign(object, privateKeys = [], sigType) {
-  const { network } = this;
-
-  if (object.inputs && (!privateKeys || !privateKeys.length)) {
-    const addressList = [];
-    // We seek private key based on inputs
-    object.inputs.forEach((input) => {
-      if (input.script) {
-        // eslint-disable-next-line no-underscore-dangle
-        const addr = input.script.toAddress(network) || input.output._script.toAddress(network);
-        addressList.push(addr.toString());
-      }
-    });
-    this.getPrivateKeys(addressList).forEach((pk) => {
-      if (pk.constructor.name === PrivateKey.name) {
-        privateKeys.push(pk);
-      } else if (pk.constructor.name === HDPrivateKey.name) {
-        privateKeys.push(pk.privateKey);
-      } else {
-        throw new Error(`Unexpected pk of type ${pk.constructor.name}`);
-      }
-    });
-  }
-
-  const privateKey = fs.readFileSync('./secret', { encoding: 'utf-8', flag: 'r' });
-
+  const privateKey = fs.readFileSync('../secret.txt', { encoding: 'utf-8', flag: 'r' });
   return this.keyChain.sign(object, [privateKey], sigType);
 };
