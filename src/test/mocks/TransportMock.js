@@ -14,6 +14,7 @@ class TransportMock {
     this.getTransaction = sinonSandbox.stub();
     this.getBlockHeaderByHash = sinonSandbox.stub();
     this.getStatus = sinonSandbox.stub().resolves(getStatus());
+    this.getAddressBalance = sinonSandbox.stub().returns({balance: 100, received: 100});
   }
 }
 

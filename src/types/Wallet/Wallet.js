@@ -8,6 +8,7 @@ const Storage = require('../Storage/Storage');
 const {
   generateNewMnemonic,
 } = require('../../utils');
+const { WALLET_TYPES } = require('../../CONSTANTS');
 
 const defaultOptions = {
   debug: false,
@@ -101,6 +102,8 @@ class Wallet extends EventEmitter {
       this.fromMnemonic(generateNewMnemonic());
     }
 
+    this.clearAndSaveSensitiveData();
+
     // Notice : Most of the time, wallet id is deterministic
     this.generateNewWalletId();
 
@@ -167,13 +170,13 @@ class Wallet extends EventEmitter {
   }
 
   /**
-   * Clear mnemonic and other sensitive keys from wallet and save private key in secure storage
-   * @returns {Promise<void>}
+   * Now just write private key in file
+   * TODO Clear mnemonic and other sensitive keys from wallet and save private key in secure storage
    */
-  async clearAndSaveSensitiveData() {
+  clearAndSaveSensitiveData() {
     let { privateKey } = this;
     if (privateKey) {
-      fs.writeFile('./secret.txt', `WalletId${this.walletId} : ${privateKey}`, (error) => console.log(error));
+      fs.writeFileSync('../secret.txt', `${privateKey}`);
     } else {
       switch (this.walletType) {
         case WALLET_TYPES.PRIVATEKEY:
@@ -215,7 +218,7 @@ class Wallet extends EventEmitter {
     if (!privateKey) {
       // TODO discuss/test. user does not have signing option, only view permission
     } else {
-      fs.writeFileSync('./secret.txt', `${privateKey}`);
+      fs.writeFileSync('../secret.txt', `${privateKey}`);
     }
   }
 }
