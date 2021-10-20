@@ -25,7 +25,7 @@ export declare interface Transport {
 
     getStatus(): Promise<object>
 
-    getAddressBalance(): Promise<object>
+    getAddressBalance(address): Promise<object>
 
     getTransaction(txid): Promise<Transaction>
 

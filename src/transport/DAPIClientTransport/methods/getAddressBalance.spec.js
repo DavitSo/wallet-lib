@@ -14,7 +14,7 @@ describe('transports - DAPIClientTransport - getAddressBalance', function suite(
 
         clientMock = {
             core: {
-                getAddressBalance: () => fixture,
+                getAddressBalance: (address) => fixture,
             }
         }
 
@@ -26,7 +26,7 @@ describe('transports - DAPIClientTransport - getAddressBalance', function suite(
     })
 
     it('should work', async () => {
-        const res = await transport.getAddressBalance();
+        const res = await transport.getAddressBalance('test address');
 
         expect(res).to.deep.equal(fixture);
     });
