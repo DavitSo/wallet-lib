@@ -26,5 +26,6 @@ DAPIClientTransport.prototype.subscribeToBlockHeaders = require('./methods/subsc
 DAPIClientTransport.prototype.subscribeToBlocks = require('./methods/subscribeToBlocks');
 DAPIClientTransport.prototype.getIdentityIdsByPublicKeyHash = require('./methods/getIdentityIdsByPublicKeyHashes');
 DAPIClientTransport.prototype.subscribeToTransactionsWithProofs = require('./methods/subscribeToTransactionsWithProofs');
+DAPIClientTransport.prototype.getAddressBalance = require('./methods/getAddressBalance');
 
 module.exports = DAPIClientTransport;
