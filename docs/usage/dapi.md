@@ -18,7 +18,7 @@ You can fetch the current instance of DAPI directly from the wallet :
 By using your own DAPI-Client instance and passing it to the Wallet constructor (using `transport` argument). You can specify your own seeds to connect to.  
 
 ```js 
-const DAPIClient = require('@dashevo/dapi-client');
+const DAPIClient = require('dapi-client');
 const { Wallet } = require('./src');
 const DAPIClientTransport = require('./src/transport/DAPIClientTransport/DAPIClientTransport.js');
 
