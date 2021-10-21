@@ -1,4 +1,4 @@
-const DAPIClient = require('@dashevo/dapi-client');
+const DAPIClient = require('dapi-client');
 
 const _ = require('lodash');
 

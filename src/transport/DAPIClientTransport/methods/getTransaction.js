@@ -1,5 +1,5 @@
 const { Transaction } = require('@dashevo/dashcore-lib');
-const NotFoundError = require('@dashevo/dapi-client/lib/transport/GrpcTransport/errors/NotFoundError');
+const NotFoundError = require('dapi-client/lib/transport/GrpcTransport/errors/NotFoundError');
 const { is } = require('../../../utils');
 const logger = require('../../../logger');
 
