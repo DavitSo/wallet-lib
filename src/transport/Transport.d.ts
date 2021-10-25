@@ -27,6 +27,8 @@ export declare interface Transport {
 
     getAddressBalance(address): Promise<object>
 
+    getTransactionFee(address, amount): Promise<object>
+
     getTransaction(txid): Promise<Transaction>
 
     sendTransaction(serializedTransaction): Promise<string>

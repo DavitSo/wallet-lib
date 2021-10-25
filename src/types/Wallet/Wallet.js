@@ -31,6 +31,7 @@ const fromHDPublicKey = require('./methods/fromHDPublicKey');
 const fromHDPrivateKey = require('./methods/fromHDPrivateKey');
 const generateNewWalletId = require('./methods/generateNewWalletId');
 const getAddressBalance = require('./methods/getAddressBalance');
+const getTransactionFee = require('./methods/getTransactionFee');
 
 const createTransportFromOptions = require('../../transport/createTransportFromOptions');
 
@@ -64,6 +65,7 @@ class Wallet extends EventEmitter {
       fromHDPublicKey,
       generateNewWalletId,
       getAddressBalance,
+      getTransactionFee,
     });
 
     this.passphrase = _.has(opts, 'passphrase') ? opts.passphrase : defaultOptions.passphrase;
