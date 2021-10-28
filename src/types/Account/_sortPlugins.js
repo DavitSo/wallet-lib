@@ -1,7 +1,7 @@
 const { each, findIndex } = require('lodash');
-const TransactionSyncStreamWorker = require('../../plugins/Workers/TransactionSyncStreamWorker/TransactionSyncStreamWorker');
-const ChainPlugin = require('../../plugins/Plugins/ChainPlugin');
-const IdentitySyncWorker = require('../../plugins/Workers/IdentitySyncWorker');
+//const TransactionSyncStreamWorker = require('../../plugins/Workers/TransactionSyncStreamWorker/TransactionSyncStreamWorker');
+//const ChainPlugin = require('../../plugins/Plugins/ChainPlugin');
+//const IdentitySyncWorker = require('../../plugins/Workers/IdentitySyncWorker');
 const { WALLET_TYPES } = require('../../CONSTANTS');
 
 const initPlugin = (UnsafePlugin) => {
@@ -127,11 +127,11 @@ const sortPlugins = (account, userUnsafePlugins) => {
   // eslint-disable-next-line no-async-promise-executor
   if (account.injectDefaultPlugins) {
     if (!account.offlineMode) {
-      plugins.push([ChainPlugin, true, true]);
-      plugins.push([TransactionSyncStreamWorker, true, true]);
+      //plugins.push([ChainPlugin, true, true]);
+      //plugins.push([TransactionSyncStreamWorker, true, true]);
 
       if (account.walletType === WALLET_TYPES.HDWALLET) {
-        plugins.push([IdentitySyncWorker, true, true]);
+        //plugins.push([IdentitySyncWorker, true, true]);
       }
     }
   }
