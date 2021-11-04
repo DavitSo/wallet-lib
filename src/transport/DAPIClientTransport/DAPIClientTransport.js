@@ -28,5 +28,6 @@ DAPIClientTransport.prototype.getIdentityIdsByPublicKeyHash = require('./methods
 DAPIClientTransport.prototype.subscribeToTransactionsWithProofs = require('./methods/subscribeToTransactionsWithProofs');
 DAPIClientTransport.prototype.getAddressBalance = require('./methods/getAddressBalance');
 DAPIClientTransport.prototype.getTransactionFee = require('./methods/getTransactionFee');
+DAPIClientTransport.prototype.getAddressTransactions = require('./methods/getAddressTransactions');
 
 module.exports = DAPIClientTransport;
