@@ -1,14 +1,11 @@
-const fs = require('fs');
 const { PrivateKey, Networks } = require('@dashevo/dashcore-lib');
 
 const EventEmitter = require('events');
 const _ = require('lodash');
-const { mnemonicToHDPrivateKey } = require('../../utils/mnemonic');
 const Storage = require('../Storage/Storage');
 const {
   generateNewMnemonic,
 } = require('../../utils');
-const { WALLET_TYPES } = require('../../CONSTANTS');
 
 const defaultOptions = {
   debug: false,
@@ -106,8 +103,6 @@ class Wallet extends EventEmitter {
       this.fromMnemonic(generateNewMnemonic());
     }
 
-    this.clearAndSaveSensitiveData();
-
     // Notice : Most of the time, wallet id is deterministic
     this.generateNewWalletId();
 
@@ -171,59 +166,6 @@ class Wallet extends EventEmitter {
     const Identities = require('../Identities/Identities');
     this.identities = new Identities(this);
     this.savedBackup = false; // TODO: When true, we delete mnemonic from internals
-  }
-
-  /**
-   * Now just write private key in file
-   * TODO Clear mnemonic and other sensitive keys from wallet and save private key in secure storage
-   */
-  clearAndSaveSensitiveData() {
-    let { privateKey } = this;
-    if (privateKey) {
-      fs.writeFileSync('../secret.txt', `${privateKey}`);
-    } else {
-      switch (this.walletType) {
-        case WALLET_TYPES.PRIVATEKEY:
-        case WALLET_TYPES.SINGLE_ADDRESS: {
-          if (!this.privateKey) {
-            throw new Error('No PrivateKey to save in secure storage');
-          }
-          privateKey = this.privateKey;
-          break;
-        }
-        case WALLET_TYPES.ADDRESS: {
-          privateKey = null;
-          break;
-        }
-        case WALLET_TYPES.PUBLICKEY: {
-          privateKey = null;
-          break;
-        }
-        case WALLET_TYPES.HDPUBLIC: {
-          privateKey = null;
-          break;
-        }
-        case WALLET_TYPES.HDWALLET: {
-          if (this.mnemonic) {
-            const hdPrivateKey = mnemonicToHDPrivateKey(this.mnemonic, this.network, this.passphrase);
-            privateKey = hdPrivateKey.privateKey;
-          } else if (this.HDPrivateKey) {
-            privateKey = this.HDPrivateKey.privateKey;
-          } else {
-            throw new Error('No HDPrivateKey or mnemonic to save in secure storage');
-          }
-          break;
-        }
-        default: {
-          throw new Error('Invalid wallet type');
-        }
-      }
-    }
-    if (!privateKey) {
-      // TODO discuss/test. user does not have signing option, only view permission
-    } else {
-      fs.writeFileSync('../secret.txt', `${privateKey}`);
-    }
   }
 }
 
