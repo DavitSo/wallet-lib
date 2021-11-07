@@ -1,7 +1,7 @@
 const { each, findIndex } = require('lodash');
 const TransactionSyncStreamWorker = require('../../plugins/Workers/TransactionSyncStreamWorker/TransactionSyncStreamWorker');
 const ChainPlugin = require('../../plugins/Plugins/ChainPlugin');
-//const IdentitySyncWorker = require('../../plugins/Workers/IdentitySyncWorker');
+const IdentitySyncWorker = require('../../plugins/Workers/IdentitySyncWorker');
 const { WALLET_TYPES } = require('../../CONSTANTS');
 
 const initPlugin = (UnsafePlugin) => {
@@ -131,7 +131,7 @@ const sortPlugins = (account, userUnsafePlugins) => {
       plugins.push([TransactionSyncStreamWorker, true, true]);
 
       if (account.walletType === WALLET_TYPES.HDWALLET) {
-        //plugins.push([IdentitySyncWorker, true, true]);
+        plugins.push([IdentitySyncWorker, true, true]);
       }
     }
   }
