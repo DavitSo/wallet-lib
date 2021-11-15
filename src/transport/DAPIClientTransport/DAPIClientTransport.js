@@ -29,5 +29,6 @@ DAPIClientTransport.prototype.subscribeToTransactionsWithProofs = require('./met
 DAPIClientTransport.prototype.getAddressBalance = require('./methods/getAddressBalance');
 DAPIClientTransport.prototype.getTransactionFee = require('./methods/getTransactionFee');
 DAPIClientTransport.prototype.getAddressTransactions = require('./methods/getAddressTransactions');
+DAPIClientTransport.prototype.getAddressUTXO = require('./methods/getAddressUTXO');
 
 module.exports = DAPIClientTransport;
