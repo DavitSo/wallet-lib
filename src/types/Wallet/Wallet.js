@@ -31,6 +31,7 @@ const getAddressBalance = require('./methods/getAddressBalance');
 const getTransactionFee = require('./methods/getTransactionFee');
 const getTransactions = require('./methods/getTransactions');
 const getAddressUTXO = require('./methods/getAddressUTXO');
+const getAccountIndexes = require('./methods/getAccountIndexes');
 
 const createTransportFromOptions = require('../../transport/createTransportFromOptions');
 
@@ -67,6 +68,7 @@ class Wallet extends EventEmitter {
       getTransactionFee,
       getTransactions,
       getAddressUTXO,
+      getAccountIndexes,
     });
 
     this.passphrase = _.has(opts, 'passphrase') ? opts.passphrase : defaultOptions.passphrase;
