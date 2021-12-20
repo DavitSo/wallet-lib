@@ -2,8 +2,8 @@
  * Return wallet's account indexes
  * @returns {*}
  */
-function getAccountIndexes() {
+function getAccountsIndexes() {
   return this.accounts.map((el) => el.index);
 }
 
-module.exports = getAccountIndexes;
+module.exports = getAccountsIndexes;
