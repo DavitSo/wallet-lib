@@ -3,7 +3,7 @@
  * @returns {*}
  */
 function getAccountIndexes() {
-  return this.accounts((el) => el.index);
+  return this.accounts.map((el) => el.index);
 }
 
 module.exports = getAccountIndexes;
