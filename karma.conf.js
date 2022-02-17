@@ -2,13 +2,22 @@
 const webpack = require('webpack');
 const dotenvResult = require('dotenv-safe').config();
 
+const karmaMocha = require('karma-mocha');
+const karmaMochaReporter = require('karma-mocha-reporter');
+const karmaChai = require('karma-chai');
+const karmaChromeLauncher = require('karma-chrome-launcher');
+const karmaSourcemapLoader = require('karma-sourcemap-loader');
+const karmaWebpack = require('karma-webpack');
+
+const webpackConfig = require('./webpack.config');
+
 if (dotenvResult.error) {
   throw dotenvResult.error;
 }
 
 module.exports = (config) => {
   config.set({
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'chai', 'webpack'],
     files: [
       'src/test/karma/loader.js',
       'tests/functional/wallet.js',
@@ -21,14 +30,12 @@ module.exports = (config) => {
       mode: 'development',
       devtool: 'inline-source-map',
       plugins: [
+        ...webpackConfig.plugins,
         new webpack.EnvironmentPlugin(
           dotenvResult.parsed,
         ),
       ],
-      node: {
-        // Prevent embedded winston to throw error with FS not existing.
-        fs: 'empty',
-      },
+      resolve: webpackConfig.resolve,
     },
     reporters: ['mocha'],
     port: 9876,
@@ -40,12 +47,12 @@ module.exports = (config) => {
     concurrency: Infinity,
     browserNoActivityTimeout: 10 * 60 * 1000,
     plugins: [
-      'karma-mocha',
-      'karma-mocha-reporter',
-      'karma-chai',
-      'karma-chrome-launcher',
-      'karma-webpack',
-      'karma-sourcemap-loader',
+      karmaMocha,
+      karmaMochaReporter,
+      karmaChai,
+      karmaChromeLauncher,
+      karmaSourcemapLoader,
+      karmaWebpack,
     ],
   });
 };
