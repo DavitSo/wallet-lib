@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "dapi-client": "git@github.com:DavitSo/js-dapi-client.git#v1.5.9-dev",
-    "@dashevo/dashcore-lib": "git@github.com:DavitSo/dashcore-lib.git#v1.0.0-dev",
+    "@dashevo/dashcore-lib": "git@github.com:DavitSo/dashcore-lib.git#v1.0.1-dev",
     "@dashevo/dpp": "~0.21.0-dev.8",
     "@dashevo/grpc-common": "~0.5.4",
     "cbor": "^8.0.0",
