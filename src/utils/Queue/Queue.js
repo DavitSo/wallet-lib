@@ -1,4 +1,4 @@
-const Emitter = require('events').EventEmitter;
+const Emitter = require('EventEmitter').EventEmitter;
 
 class Queue extends Emitter {
   constructor(options = { autoProcess: true }) {

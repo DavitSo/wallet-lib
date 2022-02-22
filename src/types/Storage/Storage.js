@@ -1,4 +1,4 @@
-const EventEmitter = require('events');
+const EventEmitter = require('EventEmitter');
 const { cloneDeep, has } = require('lodash');
 
 const CONSTANTS = require('../../CONSTANTS');

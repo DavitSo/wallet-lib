@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const EventEmitter = require('events');
+const EventEmitter = require('EventEmitter');
 const { InjectionToPluginUnallowed } = require('../errors');
 const { SAFE_FUNCTIONS, SAFE_PROPERTIES } = require('../CONSTANTS').INJECTION_LISTS;
 

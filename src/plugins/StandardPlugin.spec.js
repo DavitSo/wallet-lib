@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { EventEmitter } = require('events');
+const { EventEmitter } = require('EventEmitter');
 const StandardPluginSpec = require('./StandardPlugin');
 
 describe('Plugins - StandardPlugin', function suite() {

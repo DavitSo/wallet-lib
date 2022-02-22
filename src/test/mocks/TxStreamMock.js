@@ -1,4 +1,4 @@
-const EventEmitter = require('events');
+const EventEmitter = require('EventEmitter');
 
 class TxStreamMock extends EventEmitter {
   constructor() {

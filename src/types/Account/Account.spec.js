@@ -5,7 +5,7 @@ const fluidMnemonic = require('../../../fixtures/fluidDepth');
 const cR4t6ePrivateKey = require('../../../fixtures/cR4t6e_pk');
 const { WALLET_TYPES } = require('../../CONSTANTS');
 const { Account, EVENTS } = require('../../index');
-const EventEmitter = require('events');
+const EventEmitter = require('EventEmitter');
 const inMem = require('../../adapters/InMem');
 const blockHeader = new Dashcore.BlockHeader.fromObject({
   hash: '00000ac3a0c9df709260e41290d6902e5a4a073099f11fe8c1ce80aadc4bb331',
