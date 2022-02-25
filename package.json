@@ -28,12 +28,12 @@
     "src"
   ],
   "dependencies": {
-    "@dashevo/dashcore-lib": "git@github.com:DavitSo/dashcore-lib.git#v1.0.2-dev",
+    "@dashevo/dashcore-lib": "~0.19.26",
     "@dashevo/dpp": "~0.21.0-dev.8",
     "@dashevo/grpc-common": "~0.5.4",
     "cbor": "^8.0.0",
     "crypto-js": "^4.0.0",
-    "dapi-client": "git@github.com:DavitSo/js-dapi-client.git#v1.5.10-dev",
+    "dapi-client": "git@github.com:DavitSo/js-dapi-client.git#v1.5.8-dev",
     "lodash": "^4.17.19",
     "path-browserify": "^1.0.1",
     "pbkdf2": "^3.1.1",

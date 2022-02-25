@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { EventEmitter } = require('EventEmitter');
+const EventEmitter = require('events');
 const WorkerSpec = require('./Worker');
 const FaultyWorker = require('../../fixtures/plugins/FaultyWorker');
 
