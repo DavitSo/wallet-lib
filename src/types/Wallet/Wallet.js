@@ -1,6 +1,6 @@
 const { PrivateKey, Networks } = require('@dashevo/dashcore-lib');
 
-const EventEmitter = require('EventEmitter');
+const EventEmitter = require('events');
 const _ = require('lodash');
 const Storage = require('../Storage/Storage');
 const {
