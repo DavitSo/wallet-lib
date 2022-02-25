@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const EventEmitter = require('EventEmitter');
+const EventEmitter = require('events');
 const logger = require('../../logger');
 const { WALLET_TYPES } = require('../../CONSTANTS');
 const { is } = require('../../utils');
